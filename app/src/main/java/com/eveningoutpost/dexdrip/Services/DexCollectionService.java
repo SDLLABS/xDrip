@@ -1530,9 +1530,25 @@ public class DexCollectionService extends Service implements BtCallBack {
         return true;
     }
 
-    private static boolean getTrustAutoConnect() {
+    //check android version to set autoConnect false if 9 or greater
+
+    public int getAndroidVersion() {
+        String release = Build.VERSION.RELEASE;
+        int sdkVersion = Build.VERSION.SDK_INT;
+        return sdkVersion ;
+    }
+
+    private boolean getTrustAutoConnect() {
+        int ver = getAndroidVersion();
+        if (ver >=28) {
+            Pref.setBoolean("bluetooth_trust_autoconnect",false);
+        }
+        else{
+            Pref.setBoolean("bluetooth_trust_autoconnect",true);
+        }
         return Pref.getBoolean("bluetooth_trust_autoconnect", true);
     }
+
 
     private void closeCycle(boolean should_close) {
         if (mBluetoothGatt != null) {
